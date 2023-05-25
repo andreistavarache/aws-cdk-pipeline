@@ -22,7 +22,7 @@ class ResourceStack(Stack):
         bucket = s3.Bucket(self, "MyfirstBucket", 
                            versioned=True,
                            block_public_access=s3.BlockPublicAccess.BLOCK_ALL)
-        queue2 = sqs.Queue(
-            self, "AwsCdkPipelineQueue2",
-            visibility_timeout=Duration.seconds(300),
-        )
+        # queue2 = sqs.Queue(
+        #     self, "AwsCdkPipelineQueue2",
+        #     visibility_timeout=Duration.seconds(300),
+        # )
