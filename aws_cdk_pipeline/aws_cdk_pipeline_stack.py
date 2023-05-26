@@ -8,18 +8,12 @@ from aws_cdk import (
 )
 
 from constructs import Construct
-from .resources import ResourceStack
-
-
-class DeployStage(Stage):
-    def __init__(self, scope: Construct, construct_id: str, env: Environment, **kwargs) -> None:
-        super().__init__(scope, construct_id, **kwargs)
-
-        ResourceStack(self, 'ResourceStack', env=env, stack_name='test-stack-in-other-regions')
+from .europe_resources import DeployEuropeStage
+from .usa_resources import DeployUSAStage
 
 
 
-class AwsCdkPipelineStack(Stack):
+class MainPipeline(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -41,12 +35,17 @@ class AwsCdkPipelineStack(Stack):
                                   input=git_input
                                   )
         cdk_pipeline = cdkpipe.CodePipeline(self, "CodePipeline",
-                                            synth=synth,
                                             code_pipeline=pipeline,
+                                            synth=synth,
                                             self_mutation=True
                                             )
         deployment_wave = cdk_pipeline.add_wave("Deployment-wave")
-        deployment_wave.add_stage(DeployStage(self, 'DeployStagestuff',
+        deployment_wave.add_stage(DeployEuropeStage(self, 'DeployEuropeStage',
                                               env=Environment(account='061515210591', region='eu-west-1')
+                                              ) 
+                                )
+        deployment_wave2 = cdk_pipeline.add_wave("Deployment-wave2")
+        deployment_wave2.add_stage(DeployUSAStage(self, 'DeployUSAStage',
+                                              env=Environment(account='061515210591', region='us-east-1')
                                               ) 
                                 )
