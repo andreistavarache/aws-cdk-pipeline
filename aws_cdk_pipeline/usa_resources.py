@@ -32,7 +32,7 @@ class ResourceUSAStack(Stack):
             visibility_timeout=Duration.seconds(300),
         )
         bucket = s3.Bucket(self, "MyAmericanBucket", 
-                           bucket_name=f"MyAmericanBucket-{random_string}",
+                           bucket_name=f"my-american-bucket-{random_string.lower()}",
                            versioned=True,
                            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
                            auto_delete_objects=True,
