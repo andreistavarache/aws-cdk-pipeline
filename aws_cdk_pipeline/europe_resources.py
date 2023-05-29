@@ -10,7 +10,19 @@ from aws_cdk import (
     aws_s3 as s3
 )
 from constructs import Construct
+import random, string
 
+
+def generate_random_string(length):
+    # Choose from uppercase letters, lowercase letters, and digits
+    characters = string.ascii_letters + string.digits
+
+    # Generate a random string of specified length
+    random_string = ''.join(random.choice(characters) for _ in range(length))
+
+    return random_string
+
+random_string = generate_random_string(10)
 
 class ResourceEuropeStack(Stack):
 
@@ -22,6 +34,7 @@ class ResourceEuropeStack(Stack):
             visibility_timeout=Duration.seconds(300),
         )
         bucket = s3.Bucket(self, "MyEuropeanBucket", 
+                        bucket_name=f"MyEuropeanBucket-{random_string}",
                         versioned=True,
                         block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
                         auto_delete_objects=True,
