@@ -40,12 +40,10 @@ class ResourceUSAStack(Stack):
                            )
         default_vpc = ec2.Vpc.from_lookup(self, "default-VPC", is_default=True)
 
-        cluster = ecs.Cluster(self, "Cluster", vpc=default_vpc)
-        cluster.add_capacity("DefaultAutoScalingGroupCapacity",
-            instance_type=ec2.InstanceType("t3.micro"),
-            desired_capacity=3
-        )
-        task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+        cluster = ecs.Cluster(self, "Cluster", 
+                              enable_fargate_capacity_providers=True,
+                              vpc=default_vpc)
+        task_definition = ecs.FargateTaskDefinition(self, "TaskDef")
 
         task_definition.add_container("DefaultContainer",
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
@@ -53,10 +51,8 @@ class ResourceUSAStack(Stack):
         )
 
         # Instantiate an Amazon ECS Service
-        ecs_service = ecs.Ec2Service(self, "Service",
-            cluster=cluster,
-            task_definition=task_definition
-        )
+        ecs_service = ecs.FargateService(self, "Service", cluster=cluster, task_definition=task_definition)
+
 
 class DeployUSAStage(Stage):
     def __init__(self, scope: Construct, construct_id: str, env: Environment, **kwargs) -> None:
