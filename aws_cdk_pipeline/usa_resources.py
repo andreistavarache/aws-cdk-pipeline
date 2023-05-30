@@ -45,13 +45,13 @@ class ResourceUSAStack(Stack):
                               vpc=default_vpc)
         task_definition = ecs.FargateTaskDefinition(self, "TaskDef")
 
-        task_definition.add_container("DefaultContainer",
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
-            memory_limit_mib=512
+        task_definition.add_container("web",
+            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
         )
-
-        # Instantiate an Amazon ECS Service
-        ecs_service = ecs.FargateService(self, "Service", cluster=cluster, task_definition=task_definition)
+        ecs.FargateService(self, "FargateService",
+            cluster=cluster,
+            task_definition=task_definition,
+        )
 
 
 class DeployUSAStage(Stage):
