@@ -78,7 +78,7 @@ class ResourceUSAStack(Stack):
 
         task_definition.add_container("web",
                                       container_name="nginx-example",
-                                      image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+                                      image=ecs.ContainerImage.from_registry("nginx:latest"),
                                       port_mappings=[ecs.PortMapping(container_port=80)]
                                       )
         service=ecs.FargateService(self, "FargateService",
