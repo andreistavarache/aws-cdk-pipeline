@@ -49,7 +49,7 @@ class ResourceUSAStack(Stack):
                                    allow_all_outbound=True,
                                    )
         ecs_sg = ec2.SecurityGroup(self, "SecurityGroup2", 
-                                   security_group_name="alb-sg",
+                                   security_group_name="ecs-sg",
                                    vpc=default_vpc,
                                    allow_all_outbound=True,
                                    )
